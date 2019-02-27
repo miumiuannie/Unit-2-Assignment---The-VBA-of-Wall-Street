@@ -1,0 +1,79 @@
+' Moderate Final Version
+
+Sub StockTicker():
+
+For Each ws In Worksheets
+
+   ' Set Dimensions
+   Dim total As Double
+   Dim yearlychange As Double
+   Dim percent As Double
+   Dim DateMinOpen As Variant
+   Dim DateMaxClose As Variant
+   
+   ' get the row number of the last row with data
+   RowCount = Cells(Rows.Count, "A").End(xlUp).Row
+
+   ' Set title row
+   Range("I1").Value = "Ticker"
+   Range("J1").Value = "Yearly Change"
+   Range("K1").Value = "Percent Change"
+   Range("L1").Value = "Total Stock Volume"
+
+   For i = 2 To RowCount
+
+       ' If ticker changes then print results
+       If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+
+           ' Stores results in variable
+           total = total + Cells(i, 7).Value
+           DateMinOpen = Cells(i,3).Value
+           DateMaxClose = Cells(i,6).Value
+           yearlychange = DateMaxClose - DateMinOpen
+           percent = (DateMaxClose/DateMinOpen)-1
+           
+
+           ' Print ticker symbol
+           Range("I" & 2 + j).Value = Cells(i, 1).Value
+
+           ' Print yearly change
+           Range("J" & 2 + j).Value = yearlychange
+
+           ' Print percent
+           Range("K" & 2 + j).Value = percent
+           
+           ' Print total
+           Range("L" & 2 + j).Value = total
+
+           ' Reset Total
+           total = 0
+          
+
+           ' Move to next row
+           j = j + 1
+
+       ' Else keep adding to the total volume
+       Else
+           total = total + Cells(i, 7).Value
+           
+       End If
+
+       ' If cell changes then print results
+        If Cells(i,10).Value > = 0 Then
+        Cells(i,10).Interior.ColorIndex = 4 ' Green
+        Else
+        Cells(i,10).Interior.ColorIndex = 3 ' Red
+    
+    End If
+
+   Next i
+
+   For k = 2 to RowCount
+
+   Cells(k, 11).Value = Format(Cells(k, 11).Value, "Percent")
+
+   Next k
+   
+   Next ws
+
+End Sub
